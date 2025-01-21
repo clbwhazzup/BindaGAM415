@@ -3,6 +3,9 @@
 #include "BindaFirstPerson415Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/DecalComponent.h"
 
 ABindaFirstPerson415Projectile::ABindaFirstPerson415Projectile() 
 {
@@ -16,8 +19,14 @@ ABindaFirstPerson415Projectile::ABindaFirstPerson415Projectile()
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
 
+	// Setting the mesh in
+	ballMesh = CreateDefaultSubobject<UStaticMeshComponent>("Ball Mesh");
+
 	// Set as root component
 	RootComponent = CollisionComp;
+
+	// Connects mesh to root component
+	ballMesh->SetupAttachment(CollisionComp);
 
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
@@ -31,6 +40,24 @@ ABindaFirstPerson415Projectile::ABindaFirstPerson415Projectile()
 	InitialLifeSpan = 3.0f;
 }
 
+// Used to set the dynamic material and color for projectile mesh
+void ABindaFirstPerson415Projectile::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//Gets a random color
+	randColor = FLinearColor(UKismetMathLibrary::RandomFloatInRange(0.f, 1.f), UKismetMathLibrary::RandomFloatInRange(0.f, 1.f), UKismetMathLibrary::RandomFloatInRange(0.f, 1.f), 1.f);
+
+	// Creates dynamic material instance with the material interface, and changes mesh material to the dynamic material
+	dmiMat = UMaterialInstanceDynamic::Create(projMat, this);
+	ballMesh->SetMaterial(0, dmiMat);
+
+	// Sets the random color of the mesh
+	dmiMat->SetVectorParameterValue("ProjColor", randColor);
+	
+}
+
+
 void ABindaFirstPerson415Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
@@ -39,5 +66,23 @@ void ABindaFirstPerson415Projectile::OnHit(UPrimitiveComponent* HitComp, AActor*
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
 		Destroy();
+	}
+
+	// If projectile hit something, spawns a paintball-like splat decal
+	if (OtherActor != nullptr) 
+	{
+		// Random float frameNum 0-3
+		float frameNum = UKismetMathLibrary::RandomFloatInRange(0.f, 3.f);
+
+		// Spawns decal at hit location with random size
+		auto Decal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), baseMat, FVector(UKismetMathLibrary::RandomFloatInRange(20.f, 40.f)), Hit.Location, Hit.Normal.Rotation(), 0.f);
+
+		// Creates dynamic material instance for decal and saves it to change parameters in next lines
+		auto MatInstance = Decal->CreateDynamicMaterialInstance();
+
+		// Sets a random color, which was set in begin play, and the frame of the texture
+		// The decal texture is a grid of 4 textures, and frameNum is which of those 4
+		MatInstance->SetVectorParameterValue("Color", randColor);
+		MatInstance->SetScalarParameterValue("Frame", frameNum);
 	}
 }
