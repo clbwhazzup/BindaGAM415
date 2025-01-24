@@ -7,6 +7,8 @@
 #include "Components/BoxComponent.h"
 #include "CubeDMIMod.generated.h"
 
+class UNiagaraSystem;
+
 UCLASS()
 class BINDAFIRSTPERSON415_API ACubeDMIMod : public AActor
 {
@@ -39,6 +41,11 @@ public:
 	// Dynamic material instance so parameters can be changed
 	UPROPERTY()
 		UMaterialInstanceDynamic* dmiMat;
+
+	// Niagara system for particle effect
+	UPROPERTY(EditAnywhere)
+		UNiagaraSystem* colorP;
+
 
 	// Function for overlap, used to change material parameters
 	UFUNCTION()

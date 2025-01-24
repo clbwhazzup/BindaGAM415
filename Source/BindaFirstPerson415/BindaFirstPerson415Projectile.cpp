@@ -6,6 +6,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/DecalComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 ABindaFirstPerson415Projectile::ABindaFirstPerson415Projectile() 
 {
@@ -68,9 +70,19 @@ void ABindaFirstPerson415Projectile::OnHit(UPrimitiveComponent* HitComp, AActor*
 		Destroy();
 	}
 
-	// If projectile hit something, spawns a paintball-like splat decal
+	// If projectile hit something, spawns a paintball-like splat decal and particles
 	if (OtherActor != nullptr) 
 	{
+		// Spawn particle effect, set random color, destroy mesh, and disable collision
+		if (colorP)
+		{
+			UNiagaraComponent* particleComp = UNiagaraFunctionLibrary::SpawnSystemAttached(colorP, HitComp, NAME_None, FVector(0.f), FRotator(0.f), EAttachLocation::KeepRelativeOffset, true);
+			particleComp->SetNiagaraVariableLinearColor(FString("RandColor"), randColor);
+
+			ballMesh->DestroyComponent();
+			CollisionComp->BodyInstance.SetCollisionProfileName("NoCollision");
+		}
+
 		// Random float frameNum 0-3
 		float frameNum = UKismetMathLibrary::RandomFloatInRange(0.f, 3.f);
 
