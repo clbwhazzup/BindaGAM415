@@ -8,6 +8,7 @@
 #include "Components/DecalComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "PerlinProcTerrain.h"
 
 ABindaFirstPerson415Projectile::ABindaFirstPerson415Projectile() 
 {
@@ -96,5 +97,12 @@ void ABindaFirstPerson415Projectile::OnHit(UPrimitiveComponent* HitComp, AActor*
 		// The decal texture is a grid of 4 textures, and frameNum is which of those 4
 		MatInstance->SetVectorParameterValue("Color", randColor);
 		MatInstance->SetScalarParameterValue("Frame", frameNum);
+
+		// If hit actor is a perlin proc terrain, alter the mesh
+		APerlinProcTerrain* procTerrain = Cast<APerlinProcTerrain>(OtherActor);
+		if (procTerrain)
+		{
+			procTerrain->AlterMesh(Hit.ImpactPoint);
+		}
 	}
 }
