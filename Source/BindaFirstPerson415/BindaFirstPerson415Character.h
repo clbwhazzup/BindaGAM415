@@ -47,6 +47,9 @@ protected:
 	virtual void BeginPlay();
 
 public:
+	// Used to prevent the player from teleporting back instantly
+	UPROPERTY(EditAnywhere)
+	bool isTeleporting = false;
 		
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
