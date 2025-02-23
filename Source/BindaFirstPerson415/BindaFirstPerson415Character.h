@@ -67,6 +67,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle();
 
+
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
