@@ -57,7 +57,13 @@ void ABindaFirstPerson415Projectile::BeginPlay()
 
 	// Sets the random color of the mesh
 	dmiMat->SetVectorParameterValue("ProjColor", randColor);
-	
+
+
+	if (colorP)
+	{
+		UNiagaraComponent* particleComp = UNiagaraFunctionLibrary::SpawnSystemAttached(colorP, ballMesh, NAME_None, FVector(0.f), FRotator(0.f), EAttachLocation::KeepRelativeOffset, true);
+		particleComp->SetNiagaraVariableLinearColor(FString("RandColor"), randColor);
+	}
 }
 
 
