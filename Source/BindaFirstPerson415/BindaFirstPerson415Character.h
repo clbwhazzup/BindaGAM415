@@ -59,6 +59,18 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
 	bool bHasRifle;
 
+	UPROPERTY()
+	FTimerHandle JumpBoostTimerHandle;
+	
+	UPROPERTY()
+	float DefaultJumpVelocity = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int Falls = 0;
+
+	UFUNCTION()
+	void AddFall();
+
 	/** Setter to set the bool */
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	void SetHasRifle(bool bNewHasRifle);
@@ -66,6 +78,15 @@ public:
 	/** Getter for the bool */
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle();
+
+	UFUNCTION()
+	void SetJumpVelocity(float BoostAmount);
+
+	UFUNCTION()
+	void ResetJumpVelocity();
+
+	UFUNCTION()
+	void StopVelocity();
 
 
 protected:

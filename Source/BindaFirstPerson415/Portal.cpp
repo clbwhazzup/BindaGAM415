@@ -42,7 +42,6 @@ void APortal::BeginPlay()
 	{
 		mesh->SetMaterial(0, mat);
 	}
-
 }
 
 // Called every frame
@@ -66,7 +65,8 @@ void APortal::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 				playerChar->isTeleporting = true;
 				FVector loc = otherPortal->rootArrow->GetComponentLocation();
 				playerChar->SetActorLocation(loc);
-
+				playerChar->StopVelocity();
+				playerChar->AddFall();
 				FTimerHandle TimerHandle;
 				FTimerDelegate TimerDelegate;
 				TimerDelegate.BindUFunction(this, "SetBool", playerChar);
@@ -93,5 +93,6 @@ void APortal::UpdatePortals()
 	FRotator camRotation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetTransformComponent()->GetComponentRotation();
 	FVector combinedLocation = camLocation + Location;
 	sceneCapture->SetWorldLocationAndRotation(combinedLocation, camRotation);
+	
 }
 

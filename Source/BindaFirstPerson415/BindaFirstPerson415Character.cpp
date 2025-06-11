@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -34,6 +35,8 @@ ABindaFirstPerson415Character::ABindaFirstPerson415Character()
 	Mesh1P->CastShadow = false;
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+
+	DefaultJumpVelocity = GetCharacterMovement()->JumpZVelocity;
 
 }
 
@@ -98,6 +101,11 @@ void ABindaFirstPerson415Character::Look(const FInputActionValue& Value)
 	}
 }
 
+void ABindaFirstPerson415Character::AddFall()
+{
+	Falls += 1;
+}
+
 void ABindaFirstPerson415Character::SetHasRifle(bool bNewHasRifle)
 {
 	bHasRifle = bNewHasRifle;
@@ -106,4 +114,19 @@ void ABindaFirstPerson415Character::SetHasRifle(bool bNewHasRifle)
 bool ABindaFirstPerson415Character::GetHasRifle()
 {
 	return bHasRifle;
+}
+
+void ABindaFirstPerson415Character::SetJumpVelocity(float BoostAmount)
+{
+	GetCharacterMovement()->JumpZVelocity += BoostAmount;
+}
+
+void ABindaFirstPerson415Character::ResetJumpVelocity()
+{
+	GetCharacterMovement()->JumpZVelocity = DefaultJumpVelocity;
+}
+
+void ABindaFirstPerson415Character::StopVelocity()
+{
+	GetCharacterMovement()->Velocity = FVector(0.0f, 0.0f, 0.0f);
 }
