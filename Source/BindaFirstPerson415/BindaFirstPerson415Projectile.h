@@ -26,6 +26,9 @@ class ABindaFirstPerson415Projectile : public AActor
 	// Projectile mesh component
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* ballMesh;
+
+	UPROPERTY(EditAnywhere)
+		UClass* platformMesh;
 	
 	// Matrerial for mesh
 	UPROPERTY(EditAnywhere)

@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "NiagaraComponent.h"
 #include "JumpBoost.generated.h"
+
+class UNiagaraSystem;
 
 UCLASS()
 class BINDAFIRSTPERSON415_API AJumpBoost : public AActor
@@ -29,6 +32,12 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* boxComp;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* colorP;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraComponent* particleComp;
 
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

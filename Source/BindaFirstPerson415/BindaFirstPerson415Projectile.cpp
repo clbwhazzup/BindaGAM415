@@ -104,6 +104,15 @@ void ABindaFirstPerson415Projectile::OnHit(UPrimitiveComponent* HitComp, AActor*
 		MatInstance->SetVectorParameterValue("Color", randColor);
 		MatInstance->SetScalarParameterValue("Frame", frameNum);
 
+		if (platformMesh)
+		{
+			UWorld* const World = GetWorld();
+			if (World != nullptr)
+			{
+				World->SpawnActor<AActor>(platformMesh, Hit.ImpactPoint, FRotator::ZeroRotator);
+			}
+		}
+
 		// If hit actor is a perlin proc terrain, alter the mesh
 		APerlinProcTerrain* procTerrain = Cast<APerlinProcTerrain>(OtherActor);
 		if (procTerrain)

@@ -3,6 +3,7 @@
 
 #include "JumpBoost.h"
 #include "BindaFirstPerson415Character.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -40,6 +41,10 @@ void AJumpBoost::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 	if (playerChar)
 	{
 		playerChar->SetJumpVelocity(AJumpBoost::BoostAmount);
+		if (colorP)
+		{
+			particleComp = UNiagaraFunctionLibrary::SpawnSystemAttached(colorP, boxComp, NAME_None, FVector(0.f), FRotator(0.f), EAttachLocation::KeepRelativeOffset, true);
+		}
 	}
 }
 
@@ -49,6 +54,10 @@ void AJumpBoost::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Other
 	if (playerChar)
 	{
 		playerChar->ResetJumpVelocity();
+	}
+	if (particleComp)
+	{
+		particleComp->Deactivate();
 	}
 }
 

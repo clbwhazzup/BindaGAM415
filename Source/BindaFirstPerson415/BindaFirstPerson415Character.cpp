@@ -130,3 +130,9 @@ void ABindaFirstPerson415Character::StopVelocity()
 {
 	GetCharacterMovement()->Velocity = FVector(0.0f, 0.0f, 0.0f);
 }
+
+void ABindaFirstPerson415Character::ForceJump()
+{
+	//GetCharacterMovement()->Velocity.Z = GetCharacterMovement()->JumpZVelocity;
+	LaunchCharacter(FVector(0.0f, 0.0f, GetCharacterMovement()->JumpZVelocity), false, true);
+}

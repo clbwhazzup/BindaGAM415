@@ -3,6 +3,7 @@
 
 #include "BouncePad.h"
 #include "BindaFirstPerson415Character.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -39,7 +40,11 @@ void ABouncePad::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 	if (playerChar)
 	{
 		playerChar->SetJumpVelocity(ABouncePad::BoostAmount);
-		playerChar->Jump();
+		playerChar->ForceJump(); 
+		if (colorP)
+		{
+			particleComp = UNiagaraFunctionLibrary::SpawnSystemAttached(colorP, boxComp, NAME_None, FVector(0.f), FRotator(0.f), EAttachLocation::KeepRelativeOffset, true);
+		}
 	}
 }
 

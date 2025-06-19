@@ -88,6 +88,9 @@ public:
 	UFUNCTION()
 	void StopVelocity();
 
+	UFUNCTION()
+	void ForceJump();
+
 
 protected:
 	/** Called for movement input */

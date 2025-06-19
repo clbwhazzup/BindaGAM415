@@ -93,6 +93,15 @@ void APortal::UpdatePortals()
 	FRotator camRotation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetTransformComponent()->GetComponentRotation();
 	FVector combinedLocation = camLocation + Location;
 	sceneCapture->SetWorldLocationAndRotation(combinedLocation, camRotation);
+
+	if (FVector::Distance(this->GetActorLocation(), camLocation) > 1300.0f)
+	{
+		sceneCapture->Deactivate();
+	}
+	else
+	{
+		sceneCapture->Activate();
+	}
 	
 }
 
